@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay Start</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background-color: #fff0f5;
+      font-family: 'Comic Neue', cursive;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .content-box {
+      background-color: #ffe6f0;
+      padding: 40px;
+      border-radius: 30px;
+      box-shadow: 0 0 25px rgba(255, 182, 193, 0.6);
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+
+    img {
+      border-radius: 50%;
+      border: 5px solid #ffb6c1;
+      margin-bottom: 20px;
+    }
+
+    /* Name and badge row */
+    .name-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin: 0;
+    }
+
+    .badge {
+      background-color: #ff69b4;
+      color: white;
+      font-size: 0.8em;
+      padding: 8px 16px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px #ffb6c1;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      height: 2.2em; /* Match heading height */
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #d63384;
+      margin-top: 20px;
+    }
+
+    /* Telegram Button */
+    .telegram-button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 20px;
+      background-color: #0088cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 1em;
+      box-shadow: 0 0 10px rgba(0, 136, 204, 0.4);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .telegram-button:hover {
+      background-color: #0077b6;
+      transform: scale(1.05);
+    }
+
+    /* Overlay */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 192, 203, 0.85);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5em;
+      text-align: center;
+      z-index: 1000;
+      cursor: pointer;
+      transition: opacity 0.6s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    #overlay:hover {
+      background-color: rgba(255, 182, 193, 0.9);
+    }
+
+    #overlay.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #overlay span {
+      background-color: #ff69b4;
+      padding: 20px 40px;
+      border-radius: 30px;
+      box-shadow: 0 0 20px #ffb6c1;
+      transition: transform 0.2s;
+    }
+
+    #overlay span:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Overlay -->
+<div id="overlay">
+  <span>Click To View!!</span>
+</div>
+
+<!-- Audio -->
+<audio id="myAudio" src="song.mp3"></audio>
+
+<!-- Main Content -->
+<div class="content-box">
+  <img src="OIP.jpg" alt="Avatar" width="200" height="200">
+
+  <div class="name-row">
+    <h1>Micropositionings</h1>
+    <div class="badge">Owner</div>
+  </div>
+
+  <p>Creator Of All Madoka.Fit Products!</p>
+
+  <!-- Telegram Button -->
+  <a class="telegram-button" href="https://t.me/photogenicus" target="_blank">💬 Contact on Telegram</a>
+</div>
+
+<script>
+  const overlay = document.getElementById("overlay");
+  const audio = document.getElementById("myAudio");
+
+  overlay.addEventListener("click", () => {
+    overlay.classList.add("fading");
+    audio.play();
+    setTimeout(() => {
+      overlay.style.display = "none";
+    }, 600); // Match the transition duration
+  });
+</script>
+
+</body>
+</html>
