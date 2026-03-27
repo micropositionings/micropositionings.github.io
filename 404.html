@@ -2,70 +2,108 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>404 - Lost</title>
+<title>404 - Fallen</title>
+
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        background: radial-gradient(circle at top, #1a0000, #000);
-        color: white;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #050505, #000);
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
 
-    .container {
-        text-align: center;
-    }
+.container {
+    text-align: center;
+}
 
-    img {
-        width: 320px;
-        border-radius: 20px;
-        box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
-        animation: float 3s ease-in-out infinite;
-    }
+/* Wings container */
+.wings {
+    position: relative;
+    width: 260px;
+    height: 120px;
+    margin: 0 auto 20px;
+}
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
-    }
+/* Wings */
+.wing {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+    border-radius: 50%;
+    filter: blur(8px);
+    animation: float 4s ease-in-out infinite;
+}
 
-    h1 {
-        font-size: 5rem;
-        margin: 20px 0 10px;
-        color: #ff1a1a;
-        text-shadow: 0 0 25px #ff0000;
-    }
+.left {
+    left: 0;
+    transform: rotate(-25deg);
+}
 
-    p {
-        color: #aaa;
-        margin-bottom: 20px;
-    }
+.right {
+    right: 0;
+    transform: rotate(25deg);
+}
 
-    a {
-        padding: 12px 25px;
-        background: #ff1a1a;
-        border-radius: 10px;
-        color: white;
-        text-decoration: none;
-        transition: 0.3s;
+/* subtle movement */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(25deg);
+        opacity: 0.4;
     }
+    50% {
+        transform: translateY(-12px) rotate(30deg);
+        opacity: 0.7;
+    }
+}
 
-    a:hover {
-        background: #ff3333;
-        box-shadow: 0 0 15px #ff1a1a;
-    }
+/* Text */
+h1 {
+    font-size: 6rem;
+    margin: 10px 0;
+    color: #ff1a1a;
+    text-shadow: 0 0 25px #ff0000;
+}
+
+p {
+    color: #888;
+    margin-bottom: 25px;
+}
+
+a {
+    padding: 12px 25px;
+    background: #ff1a1a;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+a:hover {
+    background: #ff3333;
+    box-shadow: 0 0 15px #ff1a1a;
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
-    <img src="img.png" alt="lost">
+
+    <div class="wings">
+        <div class="wing left"></div>
+        <div class="wing right"></div>
+    </div>
+
     <h1>404</h1>
-    <p>you’re not supposed to be here...</p>
+    <p>you’ve fallen too far...</p>
     <a href="/">go back</a>
+
 </div>
 
 </body>
