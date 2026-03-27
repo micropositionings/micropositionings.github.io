@@ -109,20 +109,24 @@ body {
 <audio id="music" src="song" loop></audio>
 
 <script>
+<audio id="music" src="https://madoka.fit/song.mp3" loop></audio>
+<script>
 let started = false;
 
-function playMusic() {
+document.body.addEventListener("click", () => {
     if (!started) {
-        document.getElementById("music").play();
+        const music = document.getElementById("music");
+        music.play().catch(err => console.log("Playback error:", err));
         started = true;
     }
-}
+});
+</script>
 
 // heart trail
 let last = 0;
 document.addEventListener("mousemove", e => {
     const now = Date.now();
-    if (now - last < 40) return;
+    if (now - last < 70) return;
     last = now;
 
     const heart = document.createElement("div");
