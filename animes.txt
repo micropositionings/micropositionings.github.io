@@ -20,3 +20,4 @@
 20,Shimoneta,images/21.jpg,https://drive.google.com/drive/folders/1wX3f7kjFTHgRdwDgKaSvzHKybSxU8XSS?usp=sharing
 21,Call Of The Night,images/22.jpg,https://drive.google.com/drive/folders/1Svo1mQ2G75zJrjCjK_QSTDXYa5JewV5h?usp=sharing
 22,Serial Experiments Lain,images/23.jpg,https://drive.google.com/drive/folders/1-TPa5145qGeLSo_Fd8HV9co0zmtVUaMT?usp=sharing
+23,Mayo Chiki!,images/24.jpg,https://drive.google.com/drive/folders/1vo6U12_MQvJsKMg6ZZAzC3YbRzTmguZd
