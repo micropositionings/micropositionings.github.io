@@ -19,36 +19,10 @@
       height: 100%;
       color-scheme: dark;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(120, 255, 198, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #0a0a0a 0%, #0f0f0f 25%, #0a0a0a 50%, #0f0f0f 75%, #0a0a0a 100%);
-      background-attachment: fixed;
+      background: linear-gradient(135deg, #0a0a0a 0%, #0f0f0f 100%);
       color: #e0e0e0;
       overflow-x: hidden;
       position: relative;
-    }
-    
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.02)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,68,102,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,68,102,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      pointer-events: none;
-      z-index: -1;
-      animation: grainMove 20s ease-in-out infinite;
-    }
-    
-    @keyframes grainMove {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(-5px, -5px) rotate(1deg); }
-      50% { transform: translate(5px, 5px) rotate(-1deg); }
-      75% { transform: translate(-3px, 3px) rotate(0.5deg); }
     }
     
     body {
@@ -59,19 +33,13 @@
     }
     
     .header {
-      background: rgba(17, 17, 17, 0.8);
-      backdrop-filter: blur(40px) saturate(180%);
-      -webkit-backdrop-filter: blur(40px) saturate(180%);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+      background: rgba(17, 17, 17, 0.95);
       padding: 20px 24px;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.37),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      border-radius: 0 0 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      animation: slideDown 0.6s ease-out;
     }
     
     @keyframes slideDown {
@@ -99,41 +67,11 @@
       font-weight: 900;
       letter-spacing: -1px;
       white-space: nowrap;
-      background: linear-gradient(135deg, 
-        #ff4466 0%, 
-        #ff6b9d 25%, 
-        #ff99cc 50%, 
-        #ffb3d9 75%, 
-        #ff4466 100%);
-      background-size: 200% 200%;
+      background: linear-gradient(135deg, #ff4466, #ff6b9d);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: 
-        glow 3s ease-in-out infinite alternate,
-        gradientShift 4s ease-in-out infinite;
-      text-shadow: 
-        0 0 20px rgba(255, 68, 102, 0.5),
-        0 0 40px rgba(255, 68, 102, 0.3),
-        0 0 60px rgba(255, 68, 102, 0.2);
-      position: relative;
-    }
-    
-    .logo::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(135deg, 
-        rgba(255, 68, 102, 0.3) 0%, 
-        rgba(255, 107, 157, 0.3) 50%, 
-        rgba(255, 68, 102, 0.3) 100%);
-      border-radius: 8px;
-      z-index: -1;
-      filter: blur(8px);
-      animation: logoGlow 3s ease-in-out infinite alternate;
+      animation: gradientShift 4s ease-in-out infinite;
     }
     
     @keyframes glow {
@@ -280,7 +218,6 @@
     .hero {
       height: 320px;
       background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(15, 15, 15, 0.9) 100%);
-      backdrop-filter: blur(10px);
       display: flex;
       align-items: flex-end;
       padding: 48px 40px;
@@ -308,54 +245,15 @@
       position: absolute;
       top: 0;
       right: -200px;
-      width: 600px;
+      width: 400px;
       height: 100%;
-      background: radial-gradient(circle, rgba(255,68,102,0.1), transparent);
+      background: radial-gradient(circle, rgba(255,68,102,0.08), transparent);
       pointer-events: none;
-      animation: float 6s ease-in-out infinite;
-      transform: translateZ(0); /* Enable hardware acceleration */
     }
     
-    @keyframes float {
-      0%, 100% {
-        transform: translateX(0) rotate(0deg);
-      }
-      33% {
-        transform: translateX(-20px) rotate(1deg);
-      }
-      66% {
-        transform: translateX(20px) rotate(-1deg);
-      }
-    }
+
     
-    .hero::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at calc(var(--mouse-x, 0.2) * 100%) calc(var(--mouse-y, 0.8) * 100%), rgba(255,68,102,0.15) 0%, transparent 40%),
-        radial-gradient(circle at calc(var(--mouse-x, 0.8) * 100%) calc(var(--mouse-y, 0.2) * 100%), rgba(255,107,157,0.1) 0%, transparent 40%);
-      pointer-events: none;
-      animation: shimmer 8s ease-in-out infinite;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    .hero:hover::after {
-      opacity: 1;
-    }
-    
-    @keyframes shimmer {
-      0%, 100% {
-        opacity: 0.3;
-      }
-      50% {
-        opacity: 0.6;
-      }
-    }
+
     
     .hero-content {
       position: relative;
@@ -412,19 +310,10 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: textGlow 0.8s ease-out 0.8s both;
+      animation: fadeInUp 0.8s ease-out 0.8s both;
     }
     
-    @keyframes textGlow {
-      from {
-        opacity: 0;
-        filter: blur(10px);
-      }
-      to {
-        opacity: 1;
-        filter: blur(0);
-      }
-    }
+
     
     .hero-desc {
       font-size: 15px;
@@ -528,12 +417,9 @@
     }
     
     .card:hover {
-      transform: translateY(-12px) scale(1.02);
-      border-color: rgba(255, 68, 102, 0.6);
-      box-shadow: 
-        0 20px 40px rgba(0,0,0,0.8), 
-        0 0 40px rgba(255,68,102,0.2),
-        inset 0 0 0 1px rgba(255,68,102,0.1);
+      transform: translateY(-8px);
+      border-color: rgba(255, 68, 102, 0.5);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
     }
     
     .card::before {
@@ -557,13 +443,11 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      filter: brightness(0.9) contrast(1.1);
+      transition: transform 0.3s ease;
     }
     
     .card:hover .card-image {
-      filter: brightness(1.2) saturate(1.3) contrast(1.2);
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
     
     .card-info {
