@@ -22,4 +22,5 @@
 22,Serial Experiments Lain,images/23.jpg,https://drive.google.com/drive/folders/1-TPa5145qGeLSo_Fd8HV9co0zmtVUaMT?usp=sharing
 23,Mayo Chiki!,images/24.jpg,https://drive.google.com/drive/folders/1vo6U12_MQvJsKMg6ZZAzC3YbRzTmguZd
 24,The Dangers in My Heart,images/25.jpg,https://drive.google.com/drive/folders/1xgOf12wgkl7G4aXrLL6LijpYKn5Qtedg
+25,Strike The Blood,images/26.jpg,https://drive.google.com/drive/folders/1Rq6qJRLJSrICag9LZ97a7Tt4geHWwjJZ?usp=drive_link
 neeegaaaa
