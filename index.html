@@ -6,8 +6,6 @@
   <title>NYA - Streaming</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23ff4466' width='100' height='100'/><text x='50' y='70' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
     * {
       margin: 0;
       padding: 0;
@@ -18,41 +16,24 @@
       width: 100%;
       height: 100%;
       color-scheme: dark;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #0f0f0f 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
       color: #e0e0e0;
-      overflow-x: hidden;
-      position: relative;
     }
     
     body {
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      position: relative;
     }
     
     .header {
-      background: rgba(17, 17, 17, 0.95);
-      padding: 20px 24px;
+      background: #111;
+      padding: 16px 20px;
+      border-bottom: 1px solid #222;
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      animation: slideDown 0.6s ease-out;
-    }
-    
-    @keyframes slideDown {
-      from {
-        transform: translateY(-120%) scale(0.95);
-        opacity: 0;
-        filter: blur(10px);
-      }
-      to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-        filter: blur(0);
-      }
     }
     
     .header-content {
@@ -63,40 +44,10 @@
     }
     
     .logo {
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: -1px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
       white-space: nowrap;
-      background: linear-gradient(135deg, #ff4466, #ff6b9d);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: gradientShift 4s ease-in-out infinite;
-    }
-    
-    @keyframes glow {
-      from {
-        filter: drop-shadow(0 0 10px rgba(255, 68, 102, 0.6)) brightness(1);
-      }
-      to {
-        filter: drop-shadow(0 0 25px rgba(255, 68, 102, 0.9)) brightness(1.1);
-      }
-    }
-    
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    
-    @keyframes logoGlow {
-      from {
-        opacity: 0.5;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 0.8;
-        transform: scale(1.05);
-      }
     }
     
     .logo-a {
@@ -132,68 +83,26 @@
       font-size: 13px;
       font-weight: 500;
       text-transform: capitalize;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s;
       white-space: nowrap;
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .nav-tab::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 68, 102, 0.1), transparent);
-      transition: left 0.5s ease;
-    }
-    
-    .nav-tab:hover::before {
-      left: 100%;
+      border-radius: 3px;
     }
     
     .nav-tab:hover {
       color: #ddd;
-      background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 68, 102, 0.15);
+      background: #1a1a1a;
     }
     
     .nav-tab.active {
       color: #fff;
-      background: linear-gradient(135deg, rgba(255, 68, 102, 0.2), rgba(255, 68, 102, 0.1));
-      border-color: rgba(255, 68, 102, 0.5);
-      box-shadow: 0 0 20px rgba(255, 68, 102, 0.3);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% {
-        box-shadow: 0 0 20px rgba(255, 68, 102, 0.3);
-      }
-      50% {
-        box-shadow: 0 0 30px rgba(255, 68, 102, 0.5);
-      }
+      background: #1a1a1a;
+      border-color: #ff4466;
     }
     
     .main-content {
       flex: 1;
       overflow-y: auto;
-      background: linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 50%, #0a0a0a 100%);
-      animation: fadeIn 0.8s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      background: #0a0a0a;
     }
     
     .main-content::-webkit-scrollbar {
@@ -201,43 +110,27 @@
     }
     
     .main-content::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+      background: #0a0a0a;
     }
     
     .main-content::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #ff4466, #ff6b9d);
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(255, 68, 102, 0.3);
+      background: #333;
+      border-radius: 4px;
     }
     
     .main-content::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #ff6b9d, #ff4466);
-      box-shadow: 0 0 15px rgba(255, 68, 102, 0.5);
+      background: #444;
     }
     
     .hero {
       height: 320px;
-      background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(15, 15, 15, 0.9) 100%);
+      background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
       display: flex;
       align-items: flex-end;
       padding: 48px 40px;
       margin-bottom: 40px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid #1a1a1a;
       position: relative;
-      overflow: hidden;
-      animation: slideUp 0.8s ease-out 0.2s both;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from {
-        transform: translateY(50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
     }
     
     .hero::before {
@@ -245,31 +138,15 @@
       position: absolute;
       top: 0;
       right: -200px;
-      width: 400px;
+      width: 600px;
       height: 100%;
-      background: radial-gradient(circle, rgba(255,68,102,0.08), transparent);
+      background: radial-gradient(circle, rgba(255,68,102,0.1), transparent);
       pointer-events: none;
     }
-    
-
-    
-
     
     .hero-content {
       position: relative;
       z-index: 2;
-      animation: fadeInUp 1s ease-out 0.4s both;
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        transform: translateY(30px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
     }
     
     .hero-tag {
@@ -281,24 +158,6 @@
       color: #ff4466;
       margin-bottom: 12px;
       opacity: 0.9;
-      animation: bounceIn 0.6s ease-out 0.6s both;
-    }
-    
-    @keyframes bounceIn {
-      0% {
-        transform: scale(0.3);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.05);
-      }
-      70% {
-        transform: scale(0.9);
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
     }
     
     .hero-title {
@@ -306,48 +165,17 @@
       font-weight: 800;
       margin-bottom: 12px;
       line-height: 1.1;
-      background: linear-gradient(135deg, #ffffff, #ff4466);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: fadeInUp 0.8s ease-out 0.8s both;
     }
-    
-
     
     .hero-desc {
       font-size: 15px;
       color: #999;
       max-width: 500px;
       line-height: 1.5;
-      animation: slideInLeft 0.8s ease-out 1s both;
-    }
-    
-    @keyframes slideInLeft {
-      from {
-        transform: translateX(-30px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
     }
     
     .section {
       padding: 0 40px 48px;
-      animation: fadeInScale 0.8s ease-out 0.3s both;
-    }
-    
-    @keyframes fadeInScale {
-      from {
-        transform: scale(0.95);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
     }
     
     .section-title {
@@ -355,87 +183,30 @@
       font-weight: 700;
       margin-bottom: 24px;
       letter-spacing: -0.3px;
-      background: linear-gradient(135deg, #ffffff, #ff4466);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: titleSlide 0.6s ease-out 0.5s both;
-    }
-    
-    @keyframes titleSlide {
-      from {
-        transform: translateX(-20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
     }
     
     .cards-grid {
       display: grid;
       gap: 16px;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      animation: staggerFadeIn 0.8s ease-out 0.6s both;
-    }
-    
-    @keyframes staggerFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
     
     .card {
       position: relative;
-      border-radius: 12px;
+      border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
       aspect-ratio: 2/3;
-      background: linear-gradient(135deg, #1a1a1a, #222);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #1a1a1a;
+      border: 1px solid #222;
+      transition: all 0.2s;
       group: 1;
-      animation: cardLoad 0.6s ease-out both;
-      animation-delay: calc(var(--card-index, 0) * 0.1s);
-    }
-    
-    @keyframes cardLoad {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
     }
     
     .card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(255, 68, 102, 0.5);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,68,102,0.2), transparent);
-      transition: left 0.6s ease;
-      z-index: 1;
-    }
-    
-    .card:hover::before {
-      left: 100%;
+      transform: translateY(-6px);
+      border-color: #ff4466;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.6), 0 0 24px rgba(255,68,102,0.1);
     }
     
     .card-image {
@@ -443,11 +214,11 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.3s ease;
+      transition: filter 0.25s;
     }
     
     .card:hover .card-image {
-      transform: scale(1.03);
+      filter: brightness(1.15) saturate(1.1);
     }
     
     .card-info {
@@ -455,69 +226,34 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7), transparent);
-      padding: 24px 16px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+      padding: 20px 12px 12px;
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 2;
+      transition: opacity 0.2s;
     }
     
     .card:hover .card-info {
       opacity: 1;
-      transform: translateY(0);
     }
     
     .card-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       line-height: 1.3;
-      margin-bottom: 6px;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      animation: textFadeIn 0.3s ease-out 0.2s both;
+      margin-bottom: 4px;
     }
     
     .card-meta {
       font-size: 11px;
-      color: rgba(255, 68, 102, 0.9);
-      font-weight: 500;
-      animation: textFadeIn 0.3s ease-out 0.3s both;
+      color: #666;
     }
     
-    @keyframes textFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .cards-grid.loading {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    
-    .loading-spinner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(255, 68, 102, 0.3);
-      border-top: 3px solid #ff4466;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      z-index: 10;
-    }
-    
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    .placeholder {
+      padding: 60px 20px;
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+      grid-column: 1 / -1;
     }
     
     @media (max-width: 1200px) {
@@ -721,24 +457,13 @@
     }
 
     function updateHero(items) {
-      const heroSection = document.getElementById('heroSection');
       const item = items && items.length > 0 ? items[0] : null;
       
       if (item) {
-        // Add fade out animation
-        heroSection.style.opacity = '0';
-        heroSection.style.transform = 'translateY(-10px)';
-        
-        setTimeout(() => {
-          document.getElementById('heroTitle').textContent = item.title;
-          document.getElementById('heroTag').textContent = categoryInfo[currentCategory].tag.toUpperCase();
-          const domain = item.link.split('/')[2] || 'explore';
-          document.getElementById('heroDesc').textContent = `Check out this featured ${categoryInfo[currentCategory].title.toLowerCase()}`;
-          
-          // Fade back in
-          heroSection.style.opacity = '1';
-          heroSection.style.transform = 'translateY(0)';
-        }, 200);
+        document.getElementById('heroTitle').textContent = item.title;
+        document.getElementById('heroTag').textContent = categoryInfo[currentCategory].tag.toUpperCase();
+        const domain = item.link.split('/')[2] || 'explore';
+        document.getElementById('heroDesc').textContent = `Check out this featured ${categoryInfo[currentCategory].title.toLowerCase()}`;
       }
     }
 
@@ -751,12 +476,11 @@
         return;
       }
       
-      items.forEach((item, index) => {
+      items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.setProperty('--card-index', index);
         card.innerHTML = `
-          <img class="card-image" src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/160x240?text=${encodeURIComponent(item.title)}&bg=1a1a1a'" loading="lazy" />
+          <img class="card-image" src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/160x240?text=${encodeURIComponent(item.title)}&bg=1a1a1a'" />
           <div class="card-info">
             <div class="card-title">${item.title}</div>
             <div class="card-meta">tap to open</div>
@@ -778,35 +502,13 @@
       const info = categoryInfo[category];
       document.getElementById('sectionTitle').textContent = info.title;
       
-      // Show loading state
-      const grid = document.getElementById('contentGrid');
-      grid.classList.add('loading');
-      grid.innerHTML = '<div class="loading-spinner"></div>';
-      
-      // Add a small delay for smooth transition
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
       const items = await loadFromFile(category);
       updateHero(items);
       renderItems(items);
-      
-      // Remove loading state
-      grid.classList.remove('loading');
     }
 
     document.querySelectorAll('.nav-tab').forEach(tab => {
       tab.addEventListener('click', () => switchCategory(tab.dataset.category));
-    });
-
-    // Add mouse follow effect to hero
-    const hero = document.querySelector('.hero');
-    hero.addEventListener('mousemove', (e) => {
-      const rect = hero.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      
-      hero.style.setProperty('--mouse-x', x);
-      hero.style.setProperty('--mouse-y', y);
     });
 
     switchCategory('movies');
