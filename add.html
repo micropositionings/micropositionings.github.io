@@ -71,8 +71,6 @@ button{
     cursor:pointer;
 }
 
-button:hover{ background:#e03b5c; }
-
 pre{
     margin-top:20px;
     background:#111;
@@ -164,7 +162,7 @@ pre{
 <pre id="response"></pre>
 
 <div class="deploy-row">
-    <div id="deployTime">Not saved yet</div>
+    <div id="deployTime"></div>
     <button id="refreshBtn">Refresh</button>
 </div>
 
@@ -178,9 +176,8 @@ let FILE = document.getElementById("fileSelect").value;
 
 const live = document.getElementById("liveFile");
 const res = document.getElementById("response");
-const deploy = document.getElementById("deployTime");
 
-/* TOKEN FIX */
+/* TOKEN (FIXED) */
 document.getElementById("setTokenBtn").onclick = () => {
     const t = document.getElementById("tokenInput").value.trim();
     if (!t) return alert("Enter token");
@@ -191,18 +188,18 @@ document.getElementById("setTokenBtn").onclick = () => {
 };
 
 /* FILE SWITCH */
-document.getElementById("fileSelect").onchange = async (e) => {
+document.getElementById("fileSelect").onchange = (e) => {
     FILE = e.target.value;
-    await loadFile();
+    loadFile();
 };
 
-/* FORMAT = ID|NAME|IMG|LINK */
-function encodeLine(id, name, img, link){
+/* FORMAT: ID|NAME|IMG|LINK */
+function encodeLine(id,name,img,link){
     return `${id}|${name}|${img}|${link}`;
 }
 
 function decodeLine(line){
-    return line.split("|").map(x => x.trim());
+    return line.split("|");
 }
 
 /* GITHUB */
@@ -238,7 +235,7 @@ async function save(content, sha, msg){
 
 /* LOAD */
 async function loadFile(){
-    if (!TOKEN) {
+    if(!TOKEN){
         live.textContent = "Set token first";
         return;
     }
@@ -247,13 +244,16 @@ async function loadFile(){
     live.textContent = decodeURIComponent(escape(atob(f.content)));
 }
 
-/* REFRESH BUTTON */
+/* REFRESH */
 document.getElementById("refreshBtn").onclick = loadFile;
 
-/* ADD */
+/* ADD (FIXED INPUT ACCESS) */
 document.getElementById("addForm").onsubmit = async (e) => {
     e.preventDefault();
-    if (!TOKEN) return alert("Set token first");
+
+    const na = document.getElementById("addNa").value;
+    const img = document.getElementById("addImg").value;
+    const lnk = document.getElementById("addLnk").value;
 
     const f = await getFile();
     const sha = f.sha;
@@ -262,26 +262,22 @@ document.getElementById("addForm").onsubmit = async (e) => {
         .split("\n")
         .filter(Boolean);
 
-    const next = lines.length ? parseInt(lines.at(-1).split("|")[0]) + 1 : 1;
+    const next = lines.length
+        ? parseInt(lines.at(-1).split("|")[0]) + 1
+        : 1;
 
-    lines.push(encodeLine(
-        next,
-        addNa.value,
-        addImg.value,
-        addLnk.value
-    ));
+    lines.push(encodeLine(next, na, img, lnk));
 
     await save(lines.join("\n"), sha, "Add item");
 
-    res.textContent = "Added";
     await loadFile();
 };
 
-/* REMOVE */
+/* REMOVE (FIXED) */
 document.getElementById("removeForm").onsubmit = async (e) => {
     e.preventDefault();
 
-    const key = removeKey.value.toLowerCase();
+    const key = document.getElementById("removeKey").value.toLowerCase();
 
     const f = await getFile();
     const sha = f.sha;
@@ -299,11 +295,11 @@ document.getElementById("removeForm").onsubmit = async (e) => {
     await loadFile();
 };
 
-/* REPLACE */
+/* REPLACE (FIXED) */
 document.getElementById("replaceForm").onsubmit = async (e) => {
     e.preventDefault();
 
-    const key = replaceKey.value.toLowerCase();
+    const key = document.getElementById("replaceKey").value.toLowerCase();
 
     const f = await getFile();
     const sha = f.sha;
@@ -316,10 +312,10 @@ document.getElementById("replaceForm").onsubmit = async (e) => {
 
         if (p[0]?.toLowerCase() === key || p[1]?.toLowerCase() === key) {
             return encodeLine(
-                repN.value,
-                repNa.value,
-                repImg.value,
-                repLnk.value
+                document.getElementById("repN").value,
+                document.getElementById("repNa").value,
+                document.getElementById("repImg").value,
+                document.getElementById("repLnk").value
             );
         }
 
@@ -330,6 +326,9 @@ document.getElementById("replaceForm").onsubmit = async (e) => {
 
     await loadFile();
 };
+
+/* INIT */
+loadFile();
 
 </script>
 
