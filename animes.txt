@@ -6,7 +6,7 @@
 6,Takopi’s Original Sin,images/7.jpg,https://drive.google.com/drive/folders/1Gq5w5RPsJ8MctrAeWxll6EAoQc--A15C
 7,Oshi no Ko,images/8.jpg,https://drive.google.com/drive/folders/178TtrpkiQmhnJagf-z_otLDEmLUdRD4Z
 8,Highschool DxD,images/9.jpg,https://drive.google.com/drive/folders/0Bywf_48hxRsUWDEtSG5JYXdWWU0?resourcekey=0-6PIAIMUBcz09_Zwy70yHjw
-9,I Want To Eat Your Pancreas,images/10.jpg,https://drive.google.com/drive/folders/1Xt7ZbY1LLlFLCWVKd4cYs6pdG-PG3lft
+9,I Want To Eat  Your Pancreas,images/10.jpg,https://drive.google.com/drive/folders/1Xt7ZbY1LLlFLCWVKd4cYs6pdG-PG3lft
 10,The Quintessential Quintuplets,images/11.jpg,https://drive.google.com/drive/folders/1AhsUWbzmPqRB6hGiyKkKpxMfy4Am9Y0y
 11,The Girl I Like Forgot Her Glasses,images/12.jpg,https://drive.google.com/drive/folders/1BXWIX-a4kdNgr4VGHUA5xdTzF9x5mqe2
 12,Masamune-kun’s Revenge,images/13.jpg,https://drive.google.com/drive/folders/1ERYBo6bYs1A9suFa9mhMKIqXXk6R6FCD
