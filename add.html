@@ -3,72 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NYA - Add Anime</title>
+<title>NYA - Manage Anime</title>
 <style>
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #0a0a0a;
-  color: #eee;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-header {
-  width: 100%;
-  background: #111;
-  padding: 16px 20px;
-  border-bottom: 1px solid #222;
-  text-align: center;
-}
-header .logo { font-size: 28px; font-weight: 700; color: #ff4466; }
-main {
-  padding: 20px;
-  max-width: 500px;
-  width: 100%;
-}
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
-}
-input {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #333;
-  background: #1a1a1a;
-  color: #eee;
-  font-size: 14px;
-}
-button {
-  padding: 12px;
-  border-radius: 6px;
-  border: none;
-  background: #ff4466;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-button:hover { background: #e03b5c; }
-pre {
-  margin-top: 20px;
-  background: #1a1a1a;
-  padding: 12px;
-  border-radius: 6px;
-  overflow-x: auto;
-}
-.hero {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-  padding: 40px 20px;
-  margin-bottom: 30px;
-  text-align: center;
-  border-radius: 8px;
-}
-.hero h1 { font-size: 44px; font-weight: 800; margin-bottom: 12px; }
-.hero p { color: #999; font-size: 16px; }
-.hero span { color: #ff4466; font-weight: 600; text-transform: uppercase; }
+body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0a0a0a; color:#eee; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+header { width:100%; background:#111; padding:16px 20px; border-bottom:1px solid #222; text-align:center; }
+header .logo { font-size:28px; font-weight:700; color:#ff4466; }
+main { padding:20px; max-width:600px; width:100%; }
+form { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+input { padding:10px; border-radius:6px; border:1px solid #333; background:#1a1a1a; color:#eee; font-size:14px; }
+button { padding:12px; border-radius:6px; border:none; background:#ff4466; color:#fff; font-weight:bold; cursor:pointer; transition:0.2s; }
+button:hover { background:#e03b5c; }
+pre { margin-top:20px; background:#1a1a1a; padding:12px; border-radius:6px; overflow-x:auto; }
+h1 { color:#ff4466; margin-bottom:20px; text-align:center; }
 </style>
 </head>
 <body>
@@ -76,74 +22,128 @@ pre {
   <div class="logo">ny<span>a</span></div>
 </header>
 <main>
-  <div class="hero">
-    <span>Add Anime</span>
-    <h1>NYA</h1>
-    <p>Add a new anime entry to your collection safely via GitHub API.</p>
-  </div>
+<h1>Manage Anime</h1>
 
-  <form id="animeForm">
-    <input type="number" id="n" placeholder="Number (1,2,3…)" required />
-    <input type="text" id="na" placeholder="Anime Name" required />
-    <input type="text" id="img" placeholder="Image Path (e.g., images/1.jpg)" required />
-    <input type="text" id="lnk" placeholder="Link (URL)" required />
-    <button type="submit">Add Anime</button>
-  </form>
-  <pre id="response"></pre>
+<form id="addForm">
+  <h2>Add Anime</h2>
+  <input type="number" id="addN" placeholder="Number" required />
+  <input type="text" id="addNa" placeholder="Name" required />
+  <input type="text" id="addImg" placeholder="Image Path" required />
+  <input type="text" id="addLnk" placeholder="Link" required />
+  <button type="submit">Add Anime</button>
+</form>
+
+<form id="removeForm">
+  <h2>Remove Anime</h2>
+  <input type="text" id="removeKey" placeholder="Number or Name" required />
+  <button type="submit">Remove Anime</button>
+</form>
+
+<form id="replaceForm">
+  <h2>Replace Anime</h2>
+  <input type="text" id="replaceKey" placeholder="Number or Name to Replace" required />
+  <input type="number" id="repN" placeholder="New Number" required />
+  <input type="text" id="repNa" placeholder="New Name" required />
+  <input type="text" id="repImg" placeholder="New Image" required />
+  <input type="text" id="repLnk" placeholder="New Link" required />
+  <button type="submit">Replace Anime</button>
+</form>
+
+<pre id="response"></pre>
 </main>
 
 <script>
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "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";
 const OWNER = "micropositionings";
 const REPO = "micropositionings.github.io";
 const FILE_PATH = "animes.txt";
 
-const form = document.getElementById("animeForm");
 const responseEl = document.getElementById("response");
 
-async function getFileSHA() {
+// Helper: fetch current file content and SHA
+async function getFile() {
   const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
     headers: { Authorization: `token ${GITHUB_TOKEN}` }
   });
   return await res.json();
 }
 
-async function addAnime(e) {
-  e.preventDefault();
-  const n = document.getElementById("n").value;
-  const na = document.getElementById("na").value;
-  const img = document.getElementById("img").value;
-  const lnk = document.getElementById("lnk").value;
-
-  try {
-    const fileData = await getFileSHA();
-    const sha = fileData.sha;
-    const content = atob(fileData.content);
-
-    const newContent = content + `\n${n},${na},${img},${lnk}`;
-
-    const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: `Add anime ${na}`,
-        content: btoa(newContent),
-        sha: sha
-      })
-    });
-
-    const data = await putRes.json();
-    responseEl.textContent = JSON.stringify(data, null, 2);
-    form.reset();
-  } catch (err) {
-    responseEl.textContent = "Error: " + err.message;
-  }
+// Helper: commit updated content
+async function updateFile(newContent, sha, message) {
+  const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${GITHUB_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: message,
+      content: btoa(newContent),
+      sha: sha
+    })
+  });
+  return await putRes.json();
 }
 
-form.addEventListener("submit", addAnime);
+// ADD
+document.getElementById("addForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const n = document.getElementById("addN").value;
+  const na = document.getElementById("addNa").value;
+  const img = document.getElementById("addImg").value;
+  const lnk = document.getElementById("addLnk").value;
+
+  try {
+    const file = await getFile();
+    const sha = file.sha;
+    const content = atob(file.content);
+    const newContent = content + `\n${n},${na},${img},${lnk}`;
+    const data = await updateFile(newContent, sha, `Add anime ${na}`);
+    responseEl.textContent = JSON.stringify(data, null, 2);
+  } catch (err) { responseEl.textContent = "Error: " + err.message; }
+});
+
+// REMOVE
+document.getElementById("removeForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const key = document.getElementById("removeKey").value.toLowerCase();
+  try {
+    const file = await getFile();
+    const sha = file.sha;
+    const content = atob(file.content).split("\n");
+    const filtered = content.filter(line => {
+      const parts = line.split(",");
+      return parts[0].toLowerCase() !== key && parts[1].toLowerCase() !== key;
+    });
+    const newContent = filtered.join("\n");
+    const data = await updateFile(newContent, sha, `Remove anime ${key}`);
+    responseEl.textContent = JSON.stringify(data, null, 2);
+  } catch(err) { responseEl.textContent = "Error: " + err.message; }
+});
+
+// REPLACE
+document.getElementById("replaceForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const key = document.getElementById("replaceKey").value.toLowerCase();
+  const n = document.getElementById("repN").value;
+  const na = document.getElementById("repNa").value;
+  const img = document.getElementById("repImg").value;
+  const lnk = document.getElementById("repLnk").value;
+
+  try {
+    const file = await getFile();
+    const sha = file.sha;
+    const content = atob(file.content).split("\n");
+    const updated = content.map(line => {
+      const parts = line.split(",");
+      if(parts[0].toLowerCase() === key || parts[1].toLowerCase() === key) {
+        return `${n},${na},${img},${lnk}`;
+      }
+      return line;
+    });
+    const newContent = updated.join("\n");
+    const data = await updateFile(newContent, sha, `Replace anime ${key} with ${na}`);
+    responseEl.textContent = JSON.stringify(data, null, 2);
+  } catch(err) { responseEl.textContent = "Error: " + err.message; }
+});
 </script>
-</body>
-</html>
