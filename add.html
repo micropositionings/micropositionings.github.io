@@ -16,6 +16,8 @@ button:hover { background:#e03b5c; }
 pre { margin-top:20px; background:#1a1a1a; padding:12px; border-radius:6px; overflow-x:auto; white-space:pre-wrap; }
 h1, h2 { color:#ff4466; margin-bottom:10px; text-align:center; }
 label { font-size:14px; margin-top:10px; }
+.token-container { display:flex; gap:8px; margin-top:10px; justify-content:center; }
+.token-container input { flex:1; }
 </style>
 </head>
 <body>
@@ -25,8 +27,10 @@ label { font-size:14px; margin-top:10px; }
 <main>
 <h1>Manage Anime</h1>
 
-<label for="tokenInput">Enter GitHub Token:</label>
-<input type="password" id="tokenInput" placeholder="GitHub Token" />
+<div class="token-container">
+  <input type="password" id="tokenInput" placeholder="GitHub Token" />
+  <button id="setTokenBtn">Set Token</button>
+</div>
 
 <form id="addForm">
   <h2>Add Anime</h2>
@@ -59,59 +63,53 @@ label { font-size:14px; margin-top:10px; }
 </main>
 
 <script>
-const OWNER = "micropositionings"; // fixed
-const REPO = "micropositionings.github.io"; // fixed
-const FILE_PATH = "animes.txt"; // fixed
+const OWNER = "micropositionings"; 
+const REPO = "micropositionings.github.io"; 
+const FILE_PATH = "animes.txt"; 
+
+let GITHUB_TOKEN = ""; // token set manually
 
 const responseEl = document.getElementById("response");
 const liveEl = document.getElementById("liveFile");
+const tokenInput = document.getElementById("tokenInput");
+const setTokenBtn = document.getElementById("setTokenBtn");
 
-function getToken() {
-  return document.getElementById("tokenInput").value.trim();
-}
+setTokenBtn.addEventListener("click", async () => {
+  const token = tokenInput.value.trim();
+  if(!token) { alert("Enter a token first"); return; }
+  GITHUB_TOKEN = token;
+  await refreshLive();
+  alert("Token set! You can now add/remove/replace anime.");
+});
 
-// Fetch current file content and SHA
 async function getFile() {
-  const token = getToken();
-  if(!token) throw new Error("Enter GitHub token first");
+  if(!GITHUB_TOKEN) throw new Error("Enter GitHub token first and click 'Set Token'");
   const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
-    headers: { Authorization: `token ${token}` }
+    headers: { Authorization: `token ${GITHUB_TOKEN}` }
   });
   return await res.json();
 }
 
-// Commit updated content
 async function updateFile(newContent, sha, message) {
-  const token = getToken();
-  if(!token) throw new Error("Enter GitHub token first");
   const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
     method: "PUT",
-    headers: {
-      Authorization: `token ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: message,
-      content: btoa(newContent),
-      sha: sha
-    })
+    headers: { Authorization: `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ message, content: btoa(newContent), sha })
   });
   return await putRes.json();
 }
 
-// Display live animes.txt
 async function refreshLive() {
   try {
     const file = await getFile();
     liveEl.textContent = atob(file.content);
-  } catch(err) {
-    liveEl.textContent = "Error fetching file: " + err.message;
-  }
+  } catch(err) { liveEl.textContent = "Error fetching file: " + err.message; }
 }
 
 // ADD
 document.getElementById("addForm").addEventListener("submit", async e => {
   e.preventDefault();
+  if(!GITHUB_TOKEN) { alert("Set the GitHub token first!"); return; }
   const n = document.getElementById("addN").value;
   const na = document.getElementById("addNa").value;
   const img = document.getElementById("addImg").value;
@@ -130,6 +128,7 @@ document.getElementById("addForm").addEventListener("submit", async e => {
 // REMOVE
 document.getElementById("removeForm").addEventListener("submit", async e => {
   e.preventDefault();
+  if(!GITHUB_TOKEN) { alert("Set the GitHub token first!"); return; }
   const key = document.getElementById("removeKey").value.toLowerCase();
   try {
     const file = await getFile();
@@ -149,6 +148,7 @@ document.getElementById("removeForm").addEventListener("submit", async e => {
 // REPLACE
 document.getElementById("replaceForm").addEventListener("submit", async e => {
   e.preventDefault();
+  if(!GITHUB_TOKEN) { alert("Set the GitHub token first!"); return; }
   const key = document.getElementById("replaceKey").value.toLowerCase();
   const n = document.getElementById("repN").value;
   const na = document.getElementById("repNa").value;
@@ -171,7 +171,4 @@ document.getElementById("replaceForm").addEventListener("submit", async e => {
     await refreshLive();
   } catch(err) { responseEl.textContent = "Error: " + err.message; }
 });
-
-// Initial live display
-refreshLive();
 </script>
