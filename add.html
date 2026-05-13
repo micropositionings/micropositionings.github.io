@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NYA - Add Anime</title>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0a0a0a;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+header {
+  width: 100%;
+  background: #111;
+  padding: 16px 20px;
+  border-bottom: 1px solid #222;
+  text-align: center;
+}
+header .logo { font-size: 28px; font-weight: 700; color: #ff4466; }
+main {
+  padding: 20px;
+  max-width: 500px;
+  width: 100%;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: #eee;
+  font-size: 14px;
+}
+button {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  background: #ff4466;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+button:hover { background: #e03b5c; }
+pre {
+  margin-top: 20px;
+  background: #1a1a1a;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+.hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  padding: 40px 20px;
+  margin-bottom: 30px;
+  text-align: center;
+  border-radius: 8px;
+}
+.hero h1 { font-size: 44px; font-weight: 800; margin-bottom: 12px; }
+.hero p { color: #999; font-size: 16px; }
+.hero span { color: #ff4466; font-weight: 600; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">ny<span>a</span></div>
+</header>
+<main>
+  <div class="hero">
+    <span>Add Anime</span>
+    <h1>NYA</h1>
+    <p>Add a new anime entry to your collection safely via GitHub API.</p>
+  </div>
+
+  <form id="animeForm">
+    <input type="number" id="n" placeholder="Number (1,2,3…)" required />
+    <input type="text" id="na" placeholder="Anime Name" required />
+    <input type="text" id="img" placeholder="Image Path (e.g., images/1.jpg)" required />
+    <input type="text" id="lnk" placeholder="Link (URL)" required />
+    <button type="submit">Add Anime</button>
+  </form>
+  <pre id="response"></pre>
+</main>
+
+<script>
+const GITHUB_TOKEN = "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";
+const OWNER = "micropositionings";
+const REPO = "micropositionings.github.io";
+const FILE_PATH = "animes.txt";
+
+const form = document.getElementById("animeForm");
+const responseEl = document.getElementById("response");
+
+async function getFileSHA() {
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
+    headers: { Authorization: `token ${GITHUB_TOKEN}` }
+  });
+  return await res.json();
+}
+
+async function addAnime(e) {
+  e.preventDefault();
+  const n = document.getElementById("n").value;
+  const na = document.getElementById("na").value;
+  const img = document.getElementById("img").value;
+  const lnk = document.getElementById("lnk").value;
+
+  try {
+    const fileData = await getFileSHA();
+    const sha = fileData.sha;
+    const content = atob(fileData.content);
+
+    const newContent = content + `\n${n},${na},${img},${lnk}`;
+
+    const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Add anime ${na}`,
+        content: btoa(newContent),
+        sha: sha
+      })
+    });
+
+    const data = await putRes.json();
+    responseEl.textContent = JSON.stringify(data, null, 2);
+    form.reset();
+  } catch (err) {
+    responseEl.textContent = "Error: " + err.message;
+  }
+}
+
+form.addEventListener("submit", addAnime);
+</script>
+</body>
+</html>
