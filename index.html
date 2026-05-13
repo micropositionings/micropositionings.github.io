@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NYA - Streaming</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23ff4466' width='100' height='100'/><text x='50' y='70' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>" />
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     html, body {
       width: 100%; height: 100%;
       color-scheme: dark;
@@ -118,6 +118,7 @@
 </head>
 
 <body>
+
 <header class="header">
   <div class="header-content">
     <div class="logo">ny<span class="logo-a">a</span></div>
@@ -145,98 +146,95 @@
 </main>
 
 <script>
-const categoryInfo = {
-  movies: { title: 'Movies', tag: 'Cinema' },
-  animes: { title: 'Anime', tag: 'Animation' },
-  tv: { title: 'TV', tag: 'Series' },
-  games: { title: 'Games', tag: 'Gaming' },
-  proxies: { title: 'Proxies', tag: 'Network' }
-};
 
-let currentCategory = 'movies';
+let currentCategory = "movies";
 
 /* =========================
-   FAST + ROBUST LOADER
+   LOAD FILE (NO CACHE)
 ========================= */
 
 async function loadFromFile(category) {
   try {
-    const response = await fetch(`${category}.txt?v=${Date.now()}`, {
+    const res = await fetch(`${category}.txt?v=${Date.now()}`, {
       cache: "no-store"
     });
 
-    if (!response.ok) {
-      console.warn(`Missing file: ${category}.txt`);
-      return [];
-    }
+    if (!res.ok) return [];
 
-    const text = await response.text();
+    const text = await res.text();
     return parseItems(text);
 
-  } catch (err) {
-    console.error("Load error:", err);
+  } catch (e) {
+    console.error(e);
     return [];
   }
 }
 
 /* =========================
-   BULLETPROOF PARSER
+   🔥 UNIVERSAL PARSER (PIPE + CSV SAFE)
 ========================= */
 
 function parseItems(text) {
   if (!text) return [];
 
-  const lines = text.replace(/\r/g, '').split('\n');
+  const lines = text.replace(/\r/g, "").split("\n");
   const items = [];
   const seen = new Set();
 
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
+  for (let line of lines) {
+    line = line.trim();
     if (!line) continue;
     if (line.startsWith("#") || line.startsWith("//")) continue;
 
-    let parts = [];
-    let current = "";
-    let inQuotes = false;
+    let id, title, image, link;
 
-    for (let c = 0; c < line.length; c++) {
-      const ch = line[c];
-
-      if (ch === '"' && line[c - 1] !== "\\") {
-        inQuotes = !inQuotes;
-        continue;
-      }
-
-      if (ch === "," && !inQuotes) {
-        parts.push(current.trim());
-        current = "";
-        continue;
-      }
-
-      current += ch;
+    /* -------------------------
+       PIPE FORMAT (BEST)
+       1|title|image|link
+    ------------------------- */
+    if (line.includes("|")) {
+      [id, title, image, link] = line.split("|").map(x => x.trim());
     }
 
-    parts.push(current.trim());
+    /* -------------------------
+       CSV FORMAT (fallback)
+       supports commas in values
+    ------------------------- */
+    else {
+      const parts = [];
+      let cur = "";
+      let inQ = false;
 
-    parts = parts.map(p =>
-      p.replace(/^"(.*)"$/, "$1").replace(/\\"/g, '"').trim()
-    );
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
 
-    if (parts.length < 4) continue;
+        if (c === '"' && line[i - 1] !== "\\") {
+          inQ = !inQ;
+          continue;
+        }
 
-    const [id, title, image, link] = parts;
+        if (c === "," && !inQ) {
+          parts.push(cur);
+          cur = "";
+          continue;
+        }
+
+        cur += c;
+      }
+
+      parts.push(cur);
+
+      [id, title, image, link] = parts.map(p =>
+        p.replace(/^"(.*)"$/, "$1").replace(/\\"/g, '"').trim()
+      );
+    }
 
     if (!id || !title || !image || !link) continue;
     if (seen.has(id)) continue;
 
     seen.add(id);
 
-    items.push({
-      id,
-      title,
-      image,
-      link
-    });
+    items.push({ id, title, image, link });
   }
 
   return items;
@@ -261,8 +259,8 @@ function renderItems(items) {
 
     card.innerHTML = `
       <img class="card-image"
-           src="${item.image}"
-           onerror="this.src='https://via.placeholder.com/160x240?text=${encodeURIComponent(item.title)}'" />
+        src="${item.image}"
+        onerror="this.src='https://via.placeholder.com/160x240?text=${encodeURIComponent(item.title)}'"/>
       <div class="card-info">
         <div>${item.title}</div>
       </div>
@@ -277,16 +275,16 @@ function renderItems(items) {
    SWITCH CATEGORY
 ========================= */
 
-async function switchCategory(category) {
-  currentCategory = category;
+async function switchCategory(cat) {
+  currentCategory = cat;
 
   document.querySelectorAll(".nav-tab")
-    .forEach(t => t.classList.remove("active"));
+    .forEach(b => b.classList.remove("active"));
 
-  document.querySelector(`[data-category="${category}"]`)
+  document.querySelector(`[data-category="${cat}"]`)
     .classList.add("active");
 
-  const items = await loadFromFile(category);
+  const items = await loadFromFile(cat);
   renderItems(items);
 }
 
@@ -295,13 +293,15 @@ async function switchCategory(category) {
 ========================= */
 
 document.querySelectorAll(".nav-tab")
-  .forEach(btn => {
+  .forEach(btn =>
     btn.addEventListener("click", () =>
       switchCategory(btn.dataset.category)
-    );
-  });
+    )
+  );
 
 switchCategory("movies");
+
 </script>
+
 </body>
 </html>
