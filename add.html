@@ -4,191 +4,518 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NYA - Manage Content</title>
+
 <style>
-body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0a0a0a; color:#eee; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
-header { width:100%; background:#111; padding:16px 20px; border-bottom:1px solid #222; text-align:center; }
-header .logo { font-size:28px; font-weight:700; color:#ff4466; }
-main { padding:20px; max-width:600px; width:100%; }
-form { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
-input, select { padding:10px; border-radius:6px; border:1px solid #333; background:#1a1a1a; color:#eee; font-size:14px; }
-button { padding:12px; border-radius:6px; border:none; background:#ff4466; color:#fff; font-weight:bold; cursor:pointer; transition:0.2s; }
-button:hover { background:#e03b5c; }
-pre { margin-top:20px; background:#1a1a1a; padding:12px; border-radius:6px; overflow-x:auto; white-space:pre-wrap; }
-h1, h2 { color:#ff4466; margin-bottom:10px; text-align:center; }
-label { font-size:14px; margin-top:10px; }
-.token-container { display:flex; gap:8px; margin-top:10px; justify-content:center; }
-.token-container input { flex:1; }
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background:#0a0a0a;
+    color:#eee;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+header{
+    width:100%;
+    background:#111;
+    padding:16px 20px;
+    border-bottom:1px solid #222;
+    text-align:center;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:700;
+    color:#ff4466;
+}
+
+.logo span{
+    color:#fff;
+}
+
+main{
+    padding:20px;
+    max-width:700px;
+    width:100%;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:25px;
+    background:#111;
+    border:1px solid #222;
+    padding:18px;
+    border-radius:10px;
+}
+
+input,
+select{
+    padding:12px;
+    border-radius:6px;
+    border:1px solid #333;
+    background:#1a1a1a;
+    color:#eee;
+    font-size:14px;
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:#ff4466;
+}
+
+button{
+    padding:12px;
+    border-radius:6px;
+    border:none;
+    background:#ff4466;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#e03b5c;
+}
+
+pre{
+    margin-top:20px;
+    background:#111;
+    border:1px solid #222;
+    padding:14px;
+    border-radius:8px;
+    overflow-x:auto;
+    white-space:pre-wrap;
+    word-wrap:break-word;
+}
+
+h1,h2{
+    color:#ff4466;
+    margin-bottom:10px;
+    text-align:center;
+}
+
+label{
+    font-size:14px;
+    margin-top:20px;
+    display:block;
+}
+
+.token-container{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.token-container input{
+    flex:1;
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <div class="logo">ny<span>a</span></div>
+    <div class="logo">ny<span>a</span></div>
 </header>
+
 <main>
+
 <h1>Manage Content</h1>
 
 <div class="token-container">
-  <input type="password" id="tokenInput" placeholder="GitHub Token" />
-  <button id="setTokenBtn">Set Token</button>
+    <input type="password" id="tokenInput" placeholder="GitHub Token" />
+    <button id="setTokenBtn">Set Token</button>
 </div>
 
 <label for="fileSelect">Select Category:</label>
+
 <select id="fileSelect">
-  <option value="movies.txt">Movies</option>
-  <option value="animes.txt" selected>Anime</option>
-  <option value="tv.txt">TV</option>
-  <option value="games.txt">Games</option>
+    <option value="movies.txt">Movies</option>
+    <option value="animes.txt" selected>Anime</option>
+    <option value="tv.txt">TV</option>
+    <option value="games.txt">Games</option>
 </select>
 
 <form id="addForm">
-  <h2>Add Item</h2>
-  <input type="text" id="addNa" placeholder="Name" required />
-  <input type="text" id="addImg" placeholder="Image Path" required />
-  <input type="text" id="addLnk" placeholder="Link" required />
-  <button type="submit">Add</button>
+
+    <h2>Add Item</h2>
+
+    <input type="text" id="addNa" placeholder="Name" required />
+    <input type="text" id="addImg" placeholder="Image Path" required />
+    <input type="text" id="addLnk" placeholder="Link" required />
+
+    <button type="submit">Add</button>
+
 </form>
 
 <form id="removeForm">
-  <h2>Remove Item</h2>
-  <input type="text" id="removeKey" placeholder="Number or Name" required />
-  <button type="submit">Remove</button>
+
+    <h2>Remove Item</h2>
+
+    <input type="text" id="removeKey" placeholder="Number or Name" required />
+
+    <button type="submit">Remove</button>
+
 </form>
 
 <form id="replaceForm">
-  <h2>Replace Item</h2>
-  <input type="text" id="replaceKey" placeholder="Number or Name to Replace" required />
-  <input type="number" id="repN" placeholder="New Number" required />
-  <input type="text" id="repNa" placeholder="New Name" required />
-  <input type="text" id="repImg" placeholder="New Image" required />
-  <input type="text" id="repLnk" placeholder="New Link" required />
-  <button type="submit">Replace</button>
+
+    <h2>Replace Item</h2>
+
+    <input type="text" id="replaceKey" placeholder="Number or Name to Replace" required />
+
+    <input type="number" id="repN" placeholder="New Number" required />
+
+    <input type="text" id="repNa" placeholder="New Name" required />
+
+    <input type="text" id="repImg" placeholder="New Image" required />
+
+    <input type="text" id="repLnk" placeholder="New Link" required />
+
+    <button type="submit">Replace</button>
+
 </form>
 
 <h2>Live File</h2>
+
 <pre id="liveFile"></pre>
+
+<h2>Response</h2>
+
 <pre id="response"></pre>
+
 </main>
 
 <script>
+
 const OWNER = "micropositionings";
 const REPO = "micropositionings.github.io";
 
-let GITHUB_TOKEN = ""; 
-let FILE_PATH = document.getElementById("fileSelect").value; 
+let GITHUB_TOKEN = "";
+let FILE_PATH = document.getElementById("fileSelect").value;
 
 const responseEl = document.getElementById("response");
 const liveEl = document.getElementById("liveFile");
+
 const tokenInput = document.getElementById("tokenInput");
 const setTokenBtn = document.getElementById("setTokenBtn");
 const fileSelect = document.getElementById("fileSelect");
 
+function decodeBase64Unicode(str){
+    return decodeURIComponent(
+        escape(
+            atob(
+                str.replace(/\n/g, "")
+            )
+        )
+    );
+}
+
+function encodeBase64Unicode(str){
+    return btoa(
+        unescape(
+            encodeURIComponent(str)
+        )
+    );
+}
+
 fileSelect.addEventListener("change", async () => {
-  FILE_PATH = fileSelect.value;
-  await refreshLive();
+
+    FILE_PATH = fileSelect.value;
+
+    await refreshLive();
+
 });
 
 setTokenBtn.addEventListener("click", async () => {
-  const token = tokenInput.value.trim();
-  if(!token) { alert("Enter a token first"); return; }
-  GITHUB_TOKEN = token;
-  await refreshLive();
-  alert("Token set! You can now manage content.");
-});
 
-async function getFile() {
-  if(!GITHUB_TOKEN) throw new Error("Enter GitHub token first and click 'Set Token'");
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
-    headers: { Authorization: `token ${GITHUB_TOKEN}` }
-  });
-  return await res.json();
-}
+    const token = tokenInput.value.trim();
 
-async function updateFile(newContent, sha, message) {
-  const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
-    method: "PUT",
-    headers: { Authorization: `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ message, content: btoa(newContent), sha })
-  });
-  return await putRes.json();
-}
-
-async function refreshLive() {
-  try {
-    const file = await getFile();
-    liveEl.textContent = atob(file.content);
-  } catch(err) { liveEl.textContent = "Error fetching file: " + err.message; }
-}
-
-// ADD with auto-number
-document.getElementById("addForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  if(!GITHUB_TOKEN) { alert("Set the GitHub token first!"); return; }
-  const na = document.getElementById("addNa").value;
-  const img = document.getElementById("addImg").value;
-  const lnk = document.getElementById("addLnk").value;
-  try {
-    const file = await getFile();
-    const sha = file.sha;
-    const lines = atob(file.content).split("\n").filter(l => l.trim());
-    let nextNumber = 1;
-    if(lines.length > 0){
-      const lastLine = lines[lines.length-1].split(",")[0];
-      nextNumber = parseInt(lastLine) + 1;
+    if(!token){
+        alert("Enter a token first");
+        return;
     }
-    const newContent = lines.concat([`${nextNumber},${na},${img},${lnk}`]).join("\n");
-    const data = await updateFile(newContent, sha, `Add item ${na}`);
-    responseEl.textContent = JSON.stringify(data, null, 2);
+
+    GITHUB_TOKEN = token;
+
     await refreshLive();
-  } catch (err) { responseEl.textContent = "Error: " + err.message; }
+
+    alert("Token set! You can now manage content.");
+
 });
 
-// REMOVE fixed
+async function getFile(){
+
+    if(!GITHUB_TOKEN){
+        throw new Error("Enter GitHub token first and click 'Set Token'");
+    }
+
+    const res = await fetch(
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
+        {
+            headers:{
+                Authorization:`token ${GITHUB_TOKEN}`
+            }
+        }
+    );
+
+    const data = await res.json();
+
+    if(data.message){
+        throw new Error(data.message);
+    }
+
+    return data;
+}
+
+async function updateFile(newContent, sha, message){
+
+    const encoded = encodeBase64Unicode(newContent);
+
+    const putRes = await fetch(
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
+        {
+            method:"PUT",
+
+            headers:{
+                Authorization:`token ${GITHUB_TOKEN}`,
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                message,
+                content:encoded,
+                sha
+            })
+        }
+    );
+
+    return await putRes.json();
+}
+
+async function refreshLive(){
+
+    try{
+
+        const file = await getFile();
+
+        const decoded = decodeBase64Unicode(file.content);
+
+        liveEl.textContent = decoded;
+
+    }
+    catch(err){
+
+        liveEl.textContent = "Error fetching file: " + err.message;
+
+    }
+}
+
+document.getElementById("addForm").addEventListener("submit", async e => {
+
+    e.preventDefault();
+
+    if(!GITHUB_TOKEN){
+        alert("Set the GitHub token first!");
+        return;
+    }
+
+    const na = document.getElementById("addNa").value.trim();
+    const img = document.getElementById("addImg").value.trim();
+    const lnk = document.getElementById("addLnk").value.trim();
+
+    try{
+
+        const file = await getFile();
+
+        const sha = file.sha;
+
+        const content = decodeBase64Unicode(file.content);
+
+        const lines = content
+            .split("\n")
+            .filter(l => l.trim());
+
+        let nextNumber = 1;
+
+        if(lines.length > 0){
+
+            const lastLine = lines[lines.length - 1];
+
+            const lastNumber = parseInt(
+                lastLine.split(",")[0]
+            );
+
+            nextNumber = lastNumber + 1;
+        }
+
+        lines.push(
+            `${nextNumber},${na},${img},${lnk}`
+        );
+
+        const newContent = lines.join("\n");
+
+        const data = await updateFile(
+            newContent,
+            sha,
+            `Add item ${na}`
+        );
+
+        responseEl.textContent = JSON.stringify(data, null, 2);
+
+        await refreshLive();
+
+    }
+    catch(err){
+
+        responseEl.textContent = "Error: " + err.message;
+
+    }
+
+});
+
 document.getElementById("removeForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  if(!GITHUB_TOKEN) { alert("Set the GitHub token first!"); return; }
-  const key = document.getElementById("removeKey").value.toLowerCase();
-  try {
-    const file = await getFile();
-    const sha = file.sha;
-    const lines = atob(file.content).split("\n").filter(l => l.trim());
-    const filtered = lines.filter(line => {
-      const parts = line.split(",");
-      return parts[0].toLowerCase() !== key && parts[1].toLowerCase() !== key;
-    });
-    const newContent = filtered.join("\n");
-    const data = await updateFile(newContent, sha, `Remove item ${key}`);
-    responseEl.textContent = JSON.stringify(data, null, 2);
-    await refreshLive();
-  } catch(err) { responseEl.textContent = "Error: " + err.message; }
+
+    e.preventDefault();
+
+    if(!GITHUB_TOKEN){
+        alert("Set the GitHub token first!");
+        return;
+    }
+
+    const key = document
+        .getElementById("removeKey")
+        .value
+        .trim()
+        .toLowerCase();
+
+    try{
+
+        const file = await getFile();
+
+        const sha = file.sha;
+
+        const content = decodeBase64Unicode(file.content);
+
+        const lines = content
+            .split("\n")
+            .filter(l => l.trim());
+
+        const filtered = lines.filter(line => {
+
+            const parts = line.split(",");
+
+            const num = parts[0]?.toLowerCase();
+            const name = parts[1]?.toLowerCase();
+
+            return num !== key && name !== key;
+
+        });
+
+        const newContent = filtered.join("\n");
+
+        const data = await updateFile(
+            newContent,
+            sha,
+            `Remove item ${key}`
+        );
+
+        responseEl.textContent = JSON.stringify(data, null, 2);
+
+        await refreshLive();
+
+    }
+    catch(err){
+
+        responseEl.textContent = "Error: " + err.message;
+
+    }
+
 });
 
-// REPLACE
 document.getElementById("replaceForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  if(!GITHUB_TOKEN) { alert("Set the GitHub token first!"); return; }
-  const key = document.getElementById("replaceKey").value.toLowerCase();
-  const n = document.getElementById("repN").value;
-  const na = document.getElementById("repNa").value;
-  const img = document.getElementById("repImg").value;
-  const lnk = document.getElementById("repLnk").value;
-  try {
-    const file = await getFile();
-    const sha = file.sha;
-    const lines = atob(file.content).split("\n").filter(l => l.trim());
-    const updated = lines.map(line => {
-      const parts = line.split(",");
-      if(parts[0].toLowerCase() === key || parts[1].toLowerCase() === key){
-        return `${n},${na},${img},${lnk}`;
-      }
-      return line;
-    });
-    const newContent = updated.join("\n");
-    const data = await updateFile(newContent, sha, `Replace item ${key} with ${na}`);
-    responseEl.textContent = JSON.stringify(data, null, 2);
-    await refreshLive();
-  } catch(err) { responseEl.textContent = "Error: " + err.message; }
+
+    e.preventDefault();
+
+    if(!GITHUB_TOKEN){
+        alert("Set the GitHub token first!");
+        return;
+    }
+
+    const key = document
+        .getElementById("replaceKey")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const n = document.getElementById("repN").value.trim();
+    const na = document.getElementById("repNa").value.trim();
+    const img = document.getElementById("repImg").value.trim();
+    const lnk = document.getElementById("repLnk").value.trim();
+
+    try{
+
+        const file = await getFile();
+
+        const sha = file.sha;
+
+        const content = decodeBase64Unicode(file.content);
+
+        const lines = content
+            .split("\n")
+            .filter(l => l.trim());
+
+        const updated = lines.map(line => {
+
+            const parts = line.split(",");
+
+            const num = parts[0]?.toLowerCase();
+            const name = parts[1]?.toLowerCase();
+
+            if(num === key || name === key){
+
+                return `${n},${na},${img},${lnk}`;
+
+            }
+
+            return line;
+
+        });
+
+        const newContent = updated.join("\n");
+
+        const data = await updateFile(
+            newContent,
+            sha,
+            `Replace item ${key} with ${na}`
+        );
+
+        responseEl.textContent = JSON.stringify(data, null, 2);
+
+        await refreshLive();
+
+    }
+    catch(err){
+
+        responseEl.textContent = "Error: " + err.message;
+
+    }
+
 });
 
-// Initial live display
 refreshLive();
+
 </script>
+
+</body>
+</html>
