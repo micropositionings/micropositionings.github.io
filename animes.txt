@@ -10,7 +10,7 @@
 10,The Quintessential Quintuplets,images/11.jpg,https://drive.google.com/drive/folders/1AhsUWbzmPqRB6hGiyKkKpxMfy4Am9Y0y
 11,The Girl I Like Forgot Her Glasses,images/12.jpg,https://drive.google.com/drive/folders/1BXWIX-a4kdNgr4VGHUA5xdTzF9x5mqe2
 12,Masamune-kun’s Revenge,images/13.jpg,https://drive.google.com/drive/folders/1ERYBo6bYs1A9suFa9mhMKIqXXk6R6FCD
-13,Bocchi the Rock!,images/14.jpg,https://drive.google.com/drive/folders/1UrXKPeQRzfdNq2frisCvJpNiyfID-Z0L
+13,Bocchi  the Rock!,images/14.jpg,https://drive.google.com/drive/folders/1UrXKPeQRzfdNq2frisCvJpNiyfID-Z0L
 14,I Dont Like You At All Big Brother!!,images/15.jpg,https://drive.google.com/drive/folders/1tHG6K1VOpC_P83QsCir-xgRctaYGwzuF
 15,The Angel Next Door Spoils Me Rotten,images/16.jpg,https://drive.google.com/drive/folders/104-H2UonvMoDfL4ZErKmeS7ADOpIDCM9
 16,Josee the Tiger and the Fish,images/17.jpg,https://drive.google.com/drive/folders/1wXQhyNSvPgUi1jfzsgBKUUCW2s35IlPy
