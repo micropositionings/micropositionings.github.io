@@ -13,8 +13,9 @@ form { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
 input { padding:10px; border-radius:6px; border:1px solid #333; background:#1a1a1a; color:#eee; font-size:14px; }
 button { padding:12px; border-radius:6px; border:none; background:#ff4466; color:#fff; font-weight:bold; cursor:pointer; transition:0.2s; }
 button:hover { background:#e03b5c; }
-pre { margin-top:20px; background:#1a1a1a; padding:12px; border-radius:6px; overflow-x:auto; }
-h1 { color:#ff4466; margin-bottom:20px; text-align:center; }
+pre { margin-top:20px; background:#1a1a1a; padding:12px; border-radius:6px; overflow-x:auto; white-space:pre-wrap; }
+h1, h2 { color:#ff4466; margin-bottom:10px; text-align:center; }
+label { font-size:14px; margin-top:10px; }
 </style>
 </head>
 <body>
@@ -23,6 +24,9 @@ h1 { color:#ff4466; margin-bottom:20px; text-align:center; }
 </header>
 <main>
 <h1>Manage Anime</h1>
+
+<label for="tokenInput">Enter GitHub Token:</label>
+<input type="password" id="tokenInput" placeholder="GitHub Token" />
 
 <form id="addForm">
   <h2>Add Anime</h2>
@@ -49,34 +53,41 @@ h1 { color:#ff4466; margin-bottom:20px; text-align:center; }
   <button type="submit">Replace Anime</button>
 </form>
 
+<h2>Live `animes.txt`</h2>
+<pre id="liveFile"></pre>
 <pre id="response"></pre>
 </main>
 
 <script>
-  const partone = "git"  
-    const part2 = "ub_pat_11BY2OYYI0F2hRinD5kzMi_AxIszq0lkBBuXHKWX";
-  const par3 = "heWnmQpEecCTeSfE2gFzmuqQWK7SUCAJIFU4TeVOuFw";
-const GITHUB_TOKEN = partone + part2 + par3;
-const OWNER = "micropositionings";
-const REPO = "micropositionings.github.io";
-const FILE_PATH = "animes.txt";
+const OWNER = "micropositionings"; // fixed
+const REPO = "micropositionings.github.io"; // fixed
+const FILE_PATH = "animes.txt"; // fixed
 
 const responseEl = document.getElementById("response");
+const liveEl = document.getElementById("liveFile");
 
-// Helper: fetch current file content and SHA
+function getToken() {
+  return document.getElementById("tokenInput").value.trim();
+}
+
+// Fetch current file content and SHA
 async function getFile() {
+  const token = getToken();
+  if(!token) throw new Error("Enter GitHub token first");
   const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
-    headers: { Authorization: `token ${GITHUB_TOKEN}` }
+    headers: { Authorization: `token ${token}` }
   });
   return await res.json();
 }
 
-// Helper: commit updated content
+// Commit updated content
 async function updateFile(newContent, sha, message) {
+  const token = getToken();
+  if(!token) throw new Error("Enter GitHub token first");
   const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
     method: "PUT",
     headers: {
-      Authorization: `token ${GITHUB_TOKEN}`,
+      Authorization: `token ${token}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
@@ -88,6 +99,16 @@ async function updateFile(newContent, sha, message) {
   return await putRes.json();
 }
 
+// Display live animes.txt
+async function refreshLive() {
+  try {
+    const file = await getFile();
+    liveEl.textContent = atob(file.content);
+  } catch(err) {
+    liveEl.textContent = "Error fetching file: " + err.message;
+  }
+}
+
 // ADD
 document.getElementById("addForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -95,7 +116,6 @@ document.getElementById("addForm").addEventListener("submit", async e => {
   const na = document.getElementById("addNa").value;
   const img = document.getElementById("addImg").value;
   const lnk = document.getElementById("addLnk").value;
-
   try {
     const file = await getFile();
     const sha = file.sha;
@@ -103,6 +123,7 @@ document.getElementById("addForm").addEventListener("submit", async e => {
     const newContent = content + `\n${n},${na},${img},${lnk}`;
     const data = await updateFile(newContent, sha, `Add anime ${na}`);
     responseEl.textContent = JSON.stringify(data, null, 2);
+    await refreshLive();
   } catch (err) { responseEl.textContent = "Error: " + err.message; }
 });
 
@@ -121,6 +142,7 @@ document.getElementById("removeForm").addEventListener("submit", async e => {
     const newContent = filtered.join("\n");
     const data = await updateFile(newContent, sha, `Remove anime ${key}`);
     responseEl.textContent = JSON.stringify(data, null, 2);
+    await refreshLive();
   } catch(err) { responseEl.textContent = "Error: " + err.message; }
 });
 
@@ -132,7 +154,6 @@ document.getElementById("replaceForm").addEventListener("submit", async e => {
   const na = document.getElementById("repNa").value;
   const img = document.getElementById("repImg").value;
   const lnk = document.getElementById("repLnk").value;
-
   try {
     const file = await getFile();
     const sha = file.sha;
@@ -147,6 +168,10 @@ document.getElementById("replaceForm").addEventListener("submit", async e => {
     const newContent = updated.join("\n");
     const data = await updateFile(newContent, sha, `Replace anime ${key} with ${na}`);
     responseEl.textContent = JSON.stringify(data, null, 2);
+    await refreshLive();
   } catch(err) { responseEl.textContent = "Error: " + err.message; }
 });
+
+// Initial live display
+refreshLive();
 </script>
