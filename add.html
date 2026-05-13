@@ -108,7 +108,6 @@ label{
 
 .token-container input{ flex:1; }
 
-/* deploy row */
 .deploy-row{
     margin-top:10px;
     display:flex;
@@ -131,9 +130,7 @@ label{
     cursor:pointer;
     font-size:12px;
 }
-#refreshBtn:hover{
-    background:#222;
-}
+#refreshBtn:hover{ background:#222; }
 </style>
 </head>
 
@@ -206,26 +203,68 @@ let FILE_PATH = document.getElementById("fileSelect").value;
 const responseEl = document.getElementById("response");
 const liveEl = document.getElementById("liveFile");
 
-const fileSelect = document.getElementById("fileSelect");
+/* =========================
+   CSV SAFE ENGINE
+========================= */
+
+function parseLine(line){
+    const out = [];
+    let cur = "";
+    let inQ = false;
+
+    for(let i=0;i<line.length;i++){
+        const c = line[i];
+
+        if(c === '"' && line[i-1] !== "\\"){
+            inQ = !inQ;
+            continue;
+        }
+
+        if(c === "," && !inQ){
+            out.push(cur);
+            cur = "";
+            continue;
+        }
+
+        cur += c;
+    }
+
+    out.push(cur);
+
+    return out.map(x =>
+        x.replace(/^"(.*)"$/, "$1").trim()
+    );
+}
+
+function encodeLine(id, title, img, link){
+    const esc = v => `"${String(v).replace(/"/g,'\\"')}"`;
+    return [id, esc(title), esc(img), esc(link)].join(",");
+}
+
+/* =========================
+   UI
+========================= */
 
 function updateDeployTime(){
     document.getElementById("deployTime").textContent =
         "Last update: " + new Date().toLocaleString();
 }
 
-document.getElementById("refreshBtn").addEventListener("click", async () => {
+document.getElementById("refreshBtn").onclick = async () => {
     const btn = document.getElementById("refreshBtn");
-
     btn.textContent = "Refreshing...";
     btn.disabled = true;
 
     await refreshLive();
-
     updateDeployTime();
 
     btn.textContent = "Refresh";
     btn.disabled = false;
-});
+};
+
+/* =========================
+   GITHUB
+========================= */
 
 function decodeBase64Unicode(str){
     return decodeURIComponent(escape(atob(str.replace(/\n/g,""))));
@@ -235,27 +274,7 @@ function encodeBase64Unicode(str){
     return btoa(unescape(encodeURIComponent(str)));
 }
 
-fileSelect.addEventListener("change", async () => {
-    FILE_PATH = fileSelect.value;
-    await refreshLive();
-});
-
-document.getElementById("setTokenBtn").addEventListener("click", async () => {
-    const token = document.getElementById("tokenInput").value.trim();
-    if(!token) return alert("Enter token");
-
-    GITHUB_TOKEN = token;
-    await refreshLive();
-    updateDeployTime();
-
-    alert("Token set!");
-});
-
 async function getFile(){
-    if(!GITHUB_TOKEN){
-        throw new Error("Enter GitHub token first");
-    }
-
     const res = await fetch(
         `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
         { headers:{ Authorization:`token ${GITHUB_TOKEN}` } }
@@ -267,9 +286,7 @@ async function getFile(){
     return data;
 }
 
-async function updateFile(newContent, sha, message){
-    const encoded = encodeBase64Unicode(newContent);
-
+async function updateFile(content, sha, msg){
     const res = await fetch(
         `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
         {
@@ -279,8 +296,8 @@ async function updateFile(newContent, sha, message){
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
-                message,
-                content:encoded,
+                message:msg,
+                content:encodeBase64Unicode(content),
                 sha
             })
         }
@@ -289,17 +306,23 @@ async function updateFile(newContent, sha, message){
     return await res.json();
 }
 
+/* =========================
+   LOAD
+========================= */
+
 async function refreshLive(){
     try{
         const file = await getFile();
-        const decoded = decodeBase64Unicode(file.content);
-        liveEl.textContent = decoded;
+        liveEl.textContent = decodeBase64Unicode(file.content);
     }catch(err){
         liveEl.textContent = "Error: " + err.message;
     }
 }
 
-/* ADD */
+/* =========================
+   ADD
+========================= */
+
 document.getElementById("addForm").addEventListener("submit", async e=>{
     e.preventDefault();
 
@@ -311,22 +334,25 @@ document.getElementById("addForm").addEventListener("submit", async e=>{
     const sha = file.sha;
 
     const lines = decodeBase64Unicode(file.content)
-        .split("\n").filter(l=>l.trim());
+        .split("\n")
+        .filter(l=>l.trim());
 
     let next = lines.length
         ? parseInt(lines[lines.length-1].split(",")[0]) + 1
         : 1;
 
-    lines.push(`${next},${na},${img},${lnk}`);
+    lines.push(encodeLine(next, na, img, lnk));
 
-    const data = await updateFile(lines.join("\n"), sha, `Add ${na}`);
+    await updateFile(lines.join("\n"), sha, `Add ${na}`);
 
-    responseEl.textContent = JSON.stringify(data,null,2);
     await refreshLive();
     updateDeployTime();
 });
 
-/* REMOVE */
+/* =========================
+   REMOVE
+========================= */
+
 document.getElementById("removeForm").addEventListener("submit", async e=>{
     e.preventDefault();
 
@@ -336,21 +362,27 @@ document.getElementById("removeForm").addEventListener("submit", async e=>{
     const sha = file.sha;
 
     const lines = decodeBase64Unicode(file.content)
-        .split("\n").filter(l=>l.trim());
+        .split("\n")
+        .filter(l=>l.trim());
 
     const filtered = lines.filter(line=>{
-        const [num,name] = line.split(",");
-        return num.toLowerCase() !== key && name.toLowerCase() !== key;
+        const p = parseLine(line);
+        return (
+            (p[0]||"").toLowerCase() !== key &&
+            (p[1]||"").toLowerCase() !== key
+        );
     });
 
-    const data = await updateFile(filtered.join("\n"), sha, `Remove ${key}`);
+    await updateFile(filtered.join("\n"), sha, `Remove ${key}`);
 
-    responseEl.textContent = JSON.stringify(data,null,2);
     await refreshLive();
     updateDeployTime();
 });
 
-/* REPLACE */
+/* =========================
+   REPLACE
+========================= */
+
 document.getElementById("replaceForm").addEventListener("submit", async e=>{
     e.preventDefault();
 
@@ -362,21 +394,33 @@ document.getElementById("replaceForm").addEventListener("submit", async e=>{
     const updated = decodeBase64Unicode(file.content)
         .split("\n")
         .map(line=>{
-            const [num,name] = line.split(",");
-            if(num.toLowerCase()===key || name.toLowerCase()===key){
-                return `${repN.value},${repNa.value},${repImg.value},${repLnk.value}`;
+            const p = parseLine(line);
+
+            if(
+                (p[0]||"").toLowerCase() === key ||
+                (p[1]||"").toLowerCase() === key
+            ){
+                return encodeLine(
+                    repN.value,
+                    repNa.value,
+                    repImg.value,
+                    repLnk.value
+                );
             }
+
             return line;
         });
 
-    const data = await updateFile(updated.join("\n"), sha, `Replace ${key}`);
+    await updateFile(updated.join("\n"), sha, `Replace ${key}`);
 
-    responseEl.textContent = JSON.stringify(data,null,2);
     await refreshLive();
     updateDeployTime();
 });
 
-/* INIT */
+/* =========================
+   INIT
+========================= */
+
 refreshLive();
 
 </script>
