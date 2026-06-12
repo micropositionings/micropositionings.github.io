@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>kagura</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: black;
+        font-family: "Inter", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        overflow: hidden;
+    }
+
+    #enterScreen {
+        position: absolute;
+        inset: 0;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
+        letter-spacing: 2px;
+        opacity: 0.85;
+    }
+
+    #main {
+        display: none;
+        text-align: center;
+    }
+
+    img {
+        width: 115px;
+        height: 115px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .name {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .bio {
+        font-size: 13px;
+        opacity: 0.55;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="enterScreen">Click For Access</div>
+
+<div id="main">
+    <img src="https://cdn.discordapp.com/attachments/1514045838832304208/1514991823456567358/1094937728156051225.jpg?ex=6a2d6195&is=6a2c1015&hm=e3b89af3fb0d3d6d2209061eb23f602a121174a48950bb96d84cc7129af1e953">
+
+    <div class="name">kagura</div>
+    <div class="bio">O_O</div>
+</div>
+
+<audio id="music" src="music.mp3" loop></audio>
+
+<script>
+const titles = [
+    "ughhhhh",
+    "hiiiii",
+    "im kagura",
+    "hi guys",
+    "meowww"
+];
+
+setInterval(() => {
+    document.title = titles[Math.floor(Math.random() * titles.length)];
+}, 1000);
+
+const enterScreen = document.getElementById("enterScreen");
+const main = document.getElementById("main");
+const music = document.getElementById("music");
+
+enterScreen.onclick = () => {
+    enterScreen.style.display = "none";
+    main.style.display = "block";
+
+    music.volume = 0.5;
+    music.play().catch(() => {});
+};
+</script>
+
+</body>
+</html>
